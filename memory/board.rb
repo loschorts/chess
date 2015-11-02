@@ -1,7 +1,7 @@
 require_relative "card"
 
 class Board
-  attr_reader :size
+  attr_reader :size, :rows
 
   def initialize(size = 4)
     @rows = Array.new(size) { Array.new(size) }
@@ -15,7 +15,18 @@ class Board
   end
 
   def []=(pos, value)
+    begin
     x, y = pos
+    unless (0...size).include?(x) && (0...size).include?(y)
+      raise ArgumentError.new("Position off of Board!")
+    end
+    rescue ArgumentError => e
+      puts e.message
+      print "enter new position: "
+      pos = gets.chomp.split(",").map(&:to_i)
+      retry
+
+    end
     rows[x][y] = value
   end
 
