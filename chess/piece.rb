@@ -5,6 +5,7 @@ class Piece
     @board = board
     @position = position
     @color = color
+    board[position]= self
   end
 
   def valid_moves
@@ -15,9 +16,9 @@ class Piece
     self.color == other_piece.color
   end
 
-  def valid?(destination)
+  def is_valid?(destination)
     target = board[destination]
-    board.in_bounds?(destination) && !target.friendly?
+    board.in_bounds?(destination) && (target.nil? || !friendly?(target))
   end
 
 end

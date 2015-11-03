@@ -41,6 +41,7 @@ class Board
 
     if start_row == end_row
       pieces_between = @grid[start_row][start_column+1...end_column]
+    end
 
     return :vertical if start_column == end_column
     return :diagonal if
