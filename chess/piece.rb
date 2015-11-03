@@ -20,13 +20,14 @@ class Piece
   end
 
   def enemy?(other_piece)
-    return false unless other_piece.nil?
+    return false if other_piece.nil?
     self.color != other_piece.color && !other_piece.nil?
   end
 
   def is_valid?(destination)
+    return false unless board.in_bounds?(destination)
     target = board[destination]
-    board.in_bounds?(destination) && (target.nil? || !friendly?(target))
+    (target.nil? || enemy?(target))
   end
 
 end
