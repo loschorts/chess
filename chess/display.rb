@@ -1,4 +1,6 @@
 require 'colorize'
+require_relative 'board.rb'
+require_relative 'cursorable.rb'
 
 class Display
   attr_accessor :cursor
@@ -6,23 +8,29 @@ class Display
 
   def initialize(board)
     @board = board
-    @cursor = [0,0]
+    @cursor = [5,5]
     @selected = false
   end
 
-  def to_s
-    display_string = board.to_s
-    cursor_index = (cursor[0] * 9) + cursor[1]
-    cursor = display_string[cursor_index].colorize(:pink)
-    colorized_string =
-      display_string[0...cursor_index] + cursor + display_string[cursor_index+1..-1]
-  end
   def render
-    to_s.split("").each do |char|
-      print " " + char
+    board.grid.each_with_index do |row, i|
+      row.each_index do |j|
+        current_character = board[[i, j]]
+        current_character = "_" if current_character.nil?
+        current_character = current_character.colorize(:red) if cursor == [i, j]
+        print "[#{current_character}]"
+      end
+      puts
     end
   end
   def inspect
     puts
   end
 end
+
+puts "abc".colorize(:red)
+
+board = Board.new
+display = Display.new(board)
+
+display.render

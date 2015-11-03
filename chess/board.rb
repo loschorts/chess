@@ -1,7 +1,7 @@
 class Board
-
+  attr_reader :grid
   def initialize
-    @grid = Array.new(8) {Array.new(8)}
+    @grid = Array.new(8) { Array.new(8) }
     populate!
   end
 
@@ -10,9 +10,10 @@ class Board
   end
 
   def [](pos)
-    x,y = pos
+    x, y = pos
     @grid[x][y]
   end
+
   def []=(pos, value)
     x,y = pos
     @grid[x][y] = value
@@ -44,10 +45,9 @@ class Board
           result << el.to_s
         end
       end
+      result << "\n"
     end
     result
   end
-
-
 
 end
