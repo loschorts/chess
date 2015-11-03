@@ -31,7 +31,7 @@ class Board
     self[start_pos], self[end_pos] = nil, self[start_pos]
   end
 
-  def on_board?(pos)
+  def in_bounds?(pos)
     pos.all? {|x| (0...8).include?(x)}
   end
 
