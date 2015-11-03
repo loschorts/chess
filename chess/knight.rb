@@ -22,10 +22,3 @@ class Knight < SteppingPiece
   end
 
 end
-
-b = Board.new
-knt = Knight.new(b, [4,4], :white)
-pc = Piece.new(b, [5,2], :white)
-pc2 = Piece.new(b, [5,6], :white)
-p knt.moves
-p knt.valid_moves
