@@ -1,11 +1,47 @@
+require_relative 'pieces'
+require_relative 'display'
+
 class Board
   attr_reader :grid
-  def initialize
+  def initialize new_game = true
     @grid = Array.new(8) { Array.new(8) }
-    populate!
+    populate if new_game
+    @display = Display.new(self)
   end
 
-  def populate!
+  def rows
+    @grid
+  end
+
+  def get_move
+    start_pos = @display.get_player_input
+    end_pos = @display.get_player_input
+    [start_pos, end_pos]
+  end
+
+  def populate
+
+
+    [:black, :white].each do |color|
+      back_row = (color == :black ?  0 : 7)
+      back_line = [
+      Rook.new(self, [back_row,0], color),
+      Knight.new(self, [back_row,1], color),
+      Bishop.new(self, [back_row,2], color),
+      Queen.new(self, [back_row,3], color),
+      King.new(self, [back_row,4], color),
+      Bishop.new(self, [back_row,5], color),
+      Knight.new(self, [back_row,6], color),
+      Rook.new(self, [back_row,7], color)
+      ]
+      pawn_row = (color == :black ? 1 : 6)
+      pawn_line = []
+      8.times do |col|
+        pawn_line << Pawn.new(self, [pawn_row, col], color)
+      end
+      @grid[back_row] = back_line
+      @grid[pawn_row] = pawn_line
+    end
 
   end
 
@@ -66,4 +102,9 @@ class Board
     result
   end
 
+end
+
+if __FILE__ == $0
+  board = Board.new
+  p board.get_move
 end

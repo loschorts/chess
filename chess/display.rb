@@ -1,6 +1,7 @@
 require 'colorize'
 require_relative 'board.rb'
 require_relative 'cursorable.rb'
+require_relative 'gui'
 
 class Display
   include Cursorable
@@ -16,15 +17,32 @@ class Display
 
   def render
     system("clear")
-    board.grid.each_with_index do |row, i|
-      row.each_index do |j|
-        current_character = board[[i, j]]
-        current_character = "_" if current_character.nil?
-        current_character = current_character.colorize(:red) if cursor_pos == [i, j]
-        print "[#{current_character}]"
-      end
-      puts
+    puts "Fill the grid!"
+    puts "Arrow keys, WASD, or vim to move, space or enter to confirm."
+    build_grid.each { |row| puts row.join }
+  end
+  def build_grid
+    @board.rows.map.with_index do |row, i|
+      build_row(row, i)
     end
+  end
+
+  def build_row(row, i)
+    row.map.with_index do |piece, j|
+      color_options = colors_for(i, j)
+      piece.to_s.colorize(color_options)
+    end
+  end
+
+  def colors_for(i, j)
+    if [i, j] == @cursor_pos
+      bg = :light_red
+    elsif (i + j).odd?
+      bg = :light_blue
+    else
+      bg = :blue
+    end
+    { background: bg, color: :black }
   end
   def inspect
     puts
@@ -35,8 +53,9 @@ class Display
     until move
       render
       move = get_input
+      p move
     end
-    cursor_pos
+    @cursor_pos = move
   end
 
   def get_move
@@ -49,9 +68,18 @@ class Display
 
 end
 
-puts "abc".colorize(:red)
 
-board = Board.new
-display = Display.new(board)
+class NilClass
 
- p display.get_move
+  def to_s
+    "   "
+  end
+
+end
+
+
+if __FILE__ == $0
+  board = Board.new
+  display = Display.new(board)
+  display.get_player_input
+end
