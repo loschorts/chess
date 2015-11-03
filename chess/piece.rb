@@ -15,7 +15,6 @@ class Piece
     self.color == other_piece.color
   end
 
-
   def valid? destination
     target = board[destination]
     board.in_bounds?(destination) && !target.friendly?

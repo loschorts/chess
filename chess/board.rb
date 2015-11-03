@@ -35,6 +35,21 @@ class Board
     pos.all? {|x| (0...8).include?(x)}
   end
 
+  def line_type(start_pos, end_pos)
+    start_row, start_column = start_pos
+    end_row, end_column = end_pos
+
+    if start_row == end_row
+      pieces_between = @grid[start_row][start_column+1...end_column]
+
+    return :vertical if start_column == end_column
+    return :diagonal if
+
+    pieces_between.all? {|piece| piece.nil? || !piece.friendly?}
+  end
+
+
+
   def to_s
     result = ""
     @grid.each do |row|
