@@ -8,12 +8,20 @@ class Piece
     board[position]= self
   end
 
-  def valid_moves
+
+
+  def validate(moves)
     moves.select { |move| is_valid?(move) }
+
   end
 
   def friendly?(other_piece)
     self.color == other_piece.color
+  end
+
+  def enemy?(other_piece)
+    return false unless other_piece.nil?
+    self.color != other_piece.color && !other_piece.nil?
   end
 
   def is_valid?(destination)
