@@ -11,11 +11,11 @@ class Piece
     moves.select { |move| is_valid?(move) }
   end
 
-  def friendly? other_piece
+  def friendly?(other_piece)
     self.color == other_piece.color
   end
 
-  def valid? destination
+  def valid?(destination)
     target = board[destination]
     board.in_bounds?(destination) && !target.friendly?
   end
