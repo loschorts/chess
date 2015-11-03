@@ -87,21 +87,39 @@ class Board
 
   def in_check?(color)
     king = nil
-    grid.each do |row|
-      row.each do |piece|
-        next if piece.nil?
-        if piece.class == King && piece.color == color
-          king = piece
-        end
-      end
+    get_pieces_of(color).each do |piece|
+      king = piece if piece.class == King
     end
-    grid.each do |row|
-      row.each do |piece|
-        next if piece.nil?
-        return true if piece.color != king.color && piece.moves.include?(king.position)
-      end
+    other_color = (color == :black ? :white : :black)
+    get_pieces_of(other_color).each do |piece|
+      return true if piece.moves.include?(king.position)
     end
     false
+  end
+
+  def get_pieces_of (color)
+    pieces = []
+    grid.each do |row|
+      row.each do |piece|
+        next if piece.nil?
+        pieces << piece if piece.color == color
+      end
+    end
+    pieces
+  end
+
+
+  def checkmate?(color)
+    return false unless in_check?(color)
+    pieces = get_pieces_of(color)
+    pieces.each do |piece|
+      pieces.moves.each do |move|
+        hypothetical = self.dup
+        hypothetical.move!(piece.position, move)
+        return false unless hypothetical.in_check?(color)
+      end
+    end
+    true
   end
 
 
@@ -123,7 +141,7 @@ class Board
   def self.check_scenario()
     b = Board.new(false)
     b[[4,4]] = King.new(b, [4, 4], :white)
-    b[[5,5]] = Queen.new(b, [1,2], :black)
+    b[[5,5]] = Queen.new(b, [4,5], :black)
     b.in_check?(:white)
   end
 
