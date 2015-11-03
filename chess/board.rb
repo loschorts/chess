@@ -85,6 +85,24 @@ class Board
     pieces_between.all? {|piece| piece.nil? || !piece.friendly?}
   end
 
+  def in_check?(color)
+    king = nil
+    grid.each do |row|
+      row.each do |piece|
+        next if piece.nil?
+        if piece.class == King && piece.color == color
+          king = piece
+        end
+      end
+    end
+    grid.each do |row|
+      row.each do |piece|
+        next if piece.nil?
+        return true if piece.color != king.color && piece.moves.include?(king.position)
+      end
+    end
+    false
+  end
 
 
   def to_s
@@ -102,9 +120,17 @@ class Board
     result
   end
 
+  def self.check_scenario()
+    b = Board.new(false)
+    b[[4,4]] = King.new(b, [4, 4], :white)
+    b[[5,5]] = Queen.new(b, [1,2], :black)
+    b.in_check?(:white)
+  end
+
 end
 
+
+
 if __FILE__ == $0
-  board = Board.new
-  p board.get_move
+  p Board.check_scenario
 end
