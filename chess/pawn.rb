@@ -41,7 +41,7 @@ end
 
 if __FILE__ == $0
   b = Board.new
-  pawn = Pawn.new(b, [5,4], :black)
-  pawn = Pawn.new(b, [6,5], :white)
+  enemypawn = Pawn.new(b, [5,4], :black)
+  pawn = Pawn.new(b, [6,5], :white, false)
   p pawn.moves
 end
