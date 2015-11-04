@@ -3,10 +3,15 @@
 # require_relative 'pawn.rb'
 
 class Piece
-  attr_reader :board, :position, :color
+  attr_reader :board, :color
+  attr_accessor :position
 
   def to_s
     " #{@symbol} "
+  end
+
+  def inspect
+    "#{self.class}"
   end
 
   def initialize(board, position, color)
@@ -19,7 +24,6 @@ class Piece
 
   def validate(moves)
     moves.select { |move| is_valid?(move) }
-
   end
 
   def friendly?(other_piece)

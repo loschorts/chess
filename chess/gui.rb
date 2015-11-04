@@ -35,7 +35,7 @@ class Gui
   end
 
   def render
-    #system("clear")
+    system("clear")
     puts "Fill the grid!"
     puts "Arrow keys, WASD, or vim to move, space or enter to confirm."
     build_grid.each { |row| puts row.join }

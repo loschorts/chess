@@ -55,16 +55,22 @@ class Board
     @grid[x][y] = value
   end
 
-  def move(start_pos, end_pos)
-    unless on_board?(start_pos) && on_board?(end_pos)
+  def move
+
+  end
+
+  def move!(start_pos, end_pos)
+    unless in_bounds?(start_pos) && in_bounds?(end_pos)
       raise RuntimeError.new("Come on, bro...")
     end
     raise RuntimeError.new("You didn't select a piece!") if self[start_pos].nil?
-    #unless self[start_pos].valid_moves.include?(end_pos)
-    #  raise RuntimeError.new("Invalid move for that piece!")
-    #end
+    unless self[start_pos].moves.include?(end_pos)
+     raise RuntimeError.new("Invalid move for that piece!")
+    end
 
     self[start_pos], self[end_pos] = nil, self[start_pos]
+    piece = self[end_pos]
+    piece.position = end_pos
   end
 
   def in_bounds?(pos)
@@ -113,7 +119,7 @@ class Board
     return false unless in_check?(color)
     pieces = get_pieces_of(color)
     pieces.each do |piece|
-      pieces.moves.each do |move|
+      piece.moves.each do |move|
         hypothetical = self.dup
         hypothetical.move!(piece.position, move)
         return false unless hypothetical.in_check?(color)
@@ -122,6 +128,20 @@ class Board
     true
   end
 
+  def dup
+    new_board = Board.new(false)
+    @grid.each do |row|
+      row.each do |piece|
+        next if piece.nil?
+        if piece.class == Pawn
+          Pawn.new(new_board, piece.position.dup, piece.color, piece.moved)
+        else
+          piece.class.new(new_board, piece.position.dup, piece.color)
+        end
+      end
+    end
+    new_board
+  end
 
   def to_s
     result = ""
@@ -140,9 +160,10 @@ class Board
 
   def self.check_scenario()
     b = Board.new(false)
-    b[[4,4]] = King.new(b, [4, 4], :white)
-    b[[5,5]] = Queen.new(b, [4,5], :black)
-    b.in_check?(:white)
+    b[[0,0]] = King.new(b, [0, 0], :white)
+    b[[2,0]] = Queen.new(b, [2,0], :black)
+    # b[[2,1]] = Queen.new(b, [2,1], :black)
+    b.checkmate?(:white)
   end
 
 end
