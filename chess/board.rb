@@ -56,19 +56,19 @@ class Board
   end
 
   def move(start_pos, end_pos)
-    if board[start_pos].move_into_check?(end_pos)
-      raise IntoCheckError("That will put you in check!")
+
+    raise MoveError.new("You didn't select a piece!") if self[start_pos].nil?
+    raise MoveError.new("Invalid move for that piece!") unless self[start_pos].moves.include?(end_pos)
+
+    if self[start_pos].move_into_check?(end_pos)
+      raise MoveError.new("That will put you in check!")
     else
       move!(start_pos, end_pos)
     end
+
   end
 
   def move!(start_pos, end_pos)
-    raise NoPieceError.new("You didn't select a piece!") if self[start_pos].nil?
-    unless self[start_pos].moves.include?(end_pos)
-     raise InvalidMoveError.new("Invalid move for that piece!")
-    end
-
     self[start_pos], self[end_pos] = nil, self[start_pos]
     piece = self[end_pos]
     piece.position = end_pos
@@ -126,7 +126,6 @@ class Board
     end
   end
 
-
   def dup
     new_board = Board.new(false)
     @grid.each do |row|
@@ -142,41 +141,23 @@ class Board
     new_board
   end
 
-  def to_s
-    result = ""
-    @grid.each do |row|
-      row.each do |el|
-        if el.nil?
-          result << "_"
-        else
-          result << el.to_s
-        end
-      end
-      result << "\n"
-    end
-    result
-  end
+  # def self.check_scenario()
+  #   b = Board.new(false)
+  #   b[[0,0]] = King.new(b, [0, 0], :white)
+  #   b[[2,0]] = Queen.new(b, [2,0], :black)
+  #   b[[2,1]] = Queen.new(b, [2,1], :black)
+  #   b.checkmate?(:white)
+  # end
 
-  def self.check_scenario()
-    b = Board.new(false)
-    b[[0,0]] = King.new(b, [0, 0], :white)
-    b[[2,0]] = Queen.new(b, [2,0], :black)
-    b[[2,1]] = Queen.new(b, [2,1], :black)
-    b.checkmate?(:white)
-  end
+end
 
-  class NoPieceError < RuntimeError
-
-  end
-  class InvalidMoveError < RuntimeError
-  end
-  class IntoCheckError < RuntimeError
-  end
-
+class MoveError < RuntimeError
 end
 
 
 
 if __FILE__ == $0
-  p Board.check_scenario
+  b = Board.new
+  display = Display.new(b)
+  display.get_move
 end

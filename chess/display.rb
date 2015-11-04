@@ -60,25 +60,16 @@ class Display
 
   def get_move
     begin
-      begin
-        start_pos = get_player_input
-      rescue NoPieceError => e
-        puts e.message
-        retry
-      end
-        # selected = true
-      begin
-        end_pos = get_player_input
-      rescue InvalidMoveError => e
-        puts e.message
-        retry
-      end
-    # selected = false
-  rescue IntoCheckError => e
-    puts e.message
-    retry
-  end
-    [start_pos, end_pos]
+      start_pos = get_player_input
+      end_pos = get_player_input
+      self.board.move(start_pos, end_pos)
+    rescue MoveError => e
+      puts e.message
+      puts "(enter to continue)"
+      gets
+      retry
+    end
+    render
   end
 
 end
@@ -96,5 +87,5 @@ end
 if __FILE__ == $0
   board = Board.new
   display = Display.new(board)
-  display.get_player_input
+  display.get_move
 end
