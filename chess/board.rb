@@ -2,7 +2,7 @@ require_relative 'pieces'
 require_relative 'display'
 
 class Board
-  attr_reader :grid
+  attr_reader :grid, :display
   def initialize new_game = true
     @grid = Array.new(8) { Array.new(8) }
     populate if new_game
@@ -148,6 +148,9 @@ class Board
   #   b[[2,1]] = Queen.new(b, [2,1], :black)
   #   b.checkmate?(:white)
   # end
+  def inspect
+    self.object_id
+  end
 
 end
 

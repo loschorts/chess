@@ -11,7 +11,7 @@ class Piece
   end
 
   def inspect
-    "#{self.class}"
+    "#{self.object_id}"
   end
 
   def initialize(board, position, color)
