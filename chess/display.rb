@@ -59,10 +59,25 @@ class Display
   end
 
   def get_move
-    start_pos = get_player_input
-    selected = true
-    end_pos = get_player_input
-    selected = false
+    begin
+      begin
+        start_pos = get_player_input
+      rescue NoPieceError => e
+        puts e.message
+        retry
+      end
+        # selected = true
+      begin
+        end_pos = get_player_input
+      rescue InvalidMoveError => e
+        puts e.message
+        retry
+      end
+    # selected = false
+  rescue IntoCheckError => e
+    puts e.message
+    retry
+  end
     [start_pos, end_pos]
   end
 

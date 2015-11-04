@@ -41,4 +41,10 @@ class Piece
     (target.nil? || enemy?(target))
   end
 
+  def move_into_check?(destination)
+    hypothetical = board.dup
+    hypothetical.move!(self.position, destination)
+    hypothetical.in_check?(color)
+  end
+
 end
