@@ -2,6 +2,8 @@ require_relative 'pieces'
 require_relative 'display'
 
 class Board
+  class MoveError < RuntimeError
+  end
   attr_reader :grid, :display
 
   def self.simple_checkmate
@@ -73,8 +75,8 @@ class Board
 
   def move(start_pos, end_pos)
 
-    raise MoveError.new("You didn't select a piece!") if self[start_pos].nil?
-    raise MoveError.new("Invalid move for that piece!") unless self[start_pos].moves.include?(end_pos)
+    raise MoveError.new("Empty") if self[start_pos].nil?
+    raise MoveError.new("Impossible move") unless self[start_pos].possible_moves.include?(end_pos)
 
     if self[start_pos].move_into_check?(end_pos)
       raise MoveError.new("That will put you in check!")
@@ -96,10 +98,9 @@ class Board
 
   def in_check?(color)
     king = get_king(color)
-    pieces_of(other_color).each do |piece|
-      return true if piece.moves.include?(king.position)
+    pieces_of(other_color).any? do |piece|
+      piece.allowed_moves.include?(king.position)
     end
-    false
   end
 
   def other_color color
@@ -164,8 +165,4 @@ class Board
   def inspect
     Display.new(self).render
   end
-
-end
-
-class MoveError < RuntimeError
 end
