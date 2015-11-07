@@ -38,8 +38,6 @@ class Board
   end
 
   def populate
-
-
     [:black, :white].each do |color|
       back_row = (color == :black ?  0 : 7)
       back_line = [
@@ -97,15 +95,16 @@ class Board
   end
 
   def in_check?(color)
-    king = nil
-    get_pieces_of(color).each do |piece|
-      king = piece if piece.class == King
-    end
-    other_color = (color == :black ? :white : :black)
+    king = get_king(color)
+    other_color = other_color(color)
     get_pieces_of(other_color).each do |piece|
       return true if piece.moves.include?(king.position)
     end
     false
+  end
+
+  def other_color color
+    color == :black ? :white : :black
   end
 
   def get_king color

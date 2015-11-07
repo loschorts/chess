@@ -24,12 +24,3 @@ class SlidingPiece < Piece
   end
 
 end
-
-
-if __FILE__ == $0
-  require_relative '../board'
-  board = Board.new
-  rook = Rook.new(board, [4,3], :black)
-  rook = Rook.new(board, [4,4], :black)
-  p rook.moves
-end

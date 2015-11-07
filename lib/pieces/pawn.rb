@@ -4,7 +4,7 @@ class Pawn < Piece
 
   WHITE_SYMBOL = "\u2659"
   BLACK_SYMBOL = "\u265f"
-  
+
   attr_accessor :moved
   attr_reader :step
   def initialize(board, position, color, moved = false)
@@ -30,21 +30,11 @@ class Pawn < Piece
     moves << diag_left if enemy?(board[diag_left])
     moves << diag_right if enemy?(board[diag_right])
 
-    moves.select{|move| is_valid?(move)}
-
+    moves
   end
 
-  def move
-    @moved == true
-  end
+  # def move
+  #   @moved == true
+  # end
 
-end
-
-
-
-if __FILE__ == $0
-  b = Board.new
-  enemypawn = Pawn.new(b, [5,4], :black)
-  pawn = Pawn.new(b, [6,5], :white, true)
-  p pawn.moves
 end
