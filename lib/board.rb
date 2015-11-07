@@ -74,22 +74,19 @@ class Board
   end
 
   def move(start_pos, end_pos)
+    piece = self[start_pos]
+    raise MoveError.new("Empty") if piece.nil?
+    raise MoveError.new("Impossible move") unless piece.possible_moves.include?(end_pos)
+    raise MoveError.new("Into check") unless piece.valid_moves.include?(end_pos)
 
-    raise MoveError.new("Empty") if self[start_pos].nil?
-    raise MoveError.new("Impossible move") unless self[start_pos].possible_moves.include?(end_pos)
-
-    if self[start_pos].move_into_check?(end_pos)
-      raise MoveError.new("That will put you in check!")
-    else
-      move!(start_pos, end_pos)
-    end
-
+    move!(start_pos, end_pos)
   end
 
   def move!(start_pos, end_pos)
     self[start_pos], self[end_pos] = nil, self[start_pos]
     piece = self[end_pos]
     piece.position = end_pos
+    pieced.moved == true if piece.is_a?(Pawn)
   end
 
   def in_bounds?(pos)
@@ -133,11 +130,7 @@ class Board
   def checkmate?(color)
     return false unless in_check?(color)
     pieces = pieces_of(color)
-    pieces.all? do |piece|
-      piece.moves.all? do |move|
-        piece.move_into_check?(move)
-      end
-    end
+    pieces.all? { |piece| piece.allowed_moves.nil? }
   end
 
   def dup
@@ -155,13 +148,6 @@ class Board
     new_board
   end
 
-  # def self.check_scenario()
-  #   b = Board.new(false)
-  #   b[[0,0]] = King.new(b, [0, 0], :white)
-  #   b[[2,0]] = Queen.new(b, [2,0], :black)
-  #   b[[2,1]] = Queen.new(b, [2,1], :black)
-  #   b.checkmate?(:white)
-  # end
   def inspect
     Display.new(self).render
   end

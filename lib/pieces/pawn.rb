@@ -33,8 +33,4 @@ class Pawn < Piece
     moves
   end
 
-  # def move
-  #   @moved == true
-  # end
-
 end
