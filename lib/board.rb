@@ -108,6 +108,13 @@ class Board
     false
   end
 
+  def get_king color
+    get_pieces_of(color).each do |piece|
+      return piece if piece.is_a? King
+    end
+    nil
+  end
+
   def get_pieces_of (color)
     pieces = []
     grid.each do |row|
@@ -119,6 +126,10 @@ class Board
     pieces
   end
 
+  def get_moves_of color
+    pieces = get_pieces_of color
+    pieces.map {|p| p.valid_moves}
+  end
 
   def checkmate?(color)
     return false unless in_check?(color)

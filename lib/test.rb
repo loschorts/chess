@@ -1,23 +1,8 @@
 require_relative 'game'
 
-game = Game.new(Board.real_checkmate)
+game = Game.new(Board.simple_checkmate)
 
-p game.board
+p "white pieces: #{game.board.get_pieces_of(:white)}"
+p "white moves", game.board.get_moves_of(:white)
 p "white checkmate #{game.board.checkmate? (:white)}"
 p "black checkmate #{game.board.checkmate? (:black)}"
-
-cm_moves = [%w[f2 f3], %w[e7 e5], %w[g2 g4], %w[d8 h4]]
-
-
-
-def translate move
-  positions = move
-  positions.map do |pos|
-    col = ('a'..'h').to_a.find_index(pos.split("")[0])
-    row = 8 - pos.split("")[1].to_i
-    [row, col]
-  end
-  #positions
-end
-
-cm_moves.each {|move| translate move}

@@ -22,6 +22,14 @@ class Piece
     moves.select { |move| is_valid?(move) }
   end
 
+  def check_check(moves)
+    moves.select {|move| move_into_check?(move)}
+  end
+
+  def valid_moves
+    check_check(validate(self.moves))
+  end
+
   def friendly?(other_piece)
     self.color == other_piece.color
   end

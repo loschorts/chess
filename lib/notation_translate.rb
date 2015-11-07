@@ -1,4 +1,4 @@
-cm_moves = [%w[f2 f3], %w[e7 e5], %w[g2 g4], %w[d8 h4]]
+moves = [%w[f2 f3], %w[e7 e5], %w[g2 g4], %w[d8 h4]]
 
 def translate move
   positions = move
@@ -10,4 +10,4 @@ def translate move
   #positions
 end
 
-cm_moves.each {|move| translate move}
+moves.map {|move| p translate move}
