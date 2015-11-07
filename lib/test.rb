@@ -1,3 +1,3 @@
-Dir[Dir.pwd + "/*"].each {|file| require file }
+require_relative 'game'
 
-p game = Game.new(false)
+p game = Game.new()
