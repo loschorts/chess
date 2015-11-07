@@ -1,7 +1,3 @@
-# require_relative 'sliding_piece.rb'
-# require_relative 'stepping_piece.rb'
-# require_relative 'pawn.rb'
-
 class Piece
   attr_reader :board, :color
   attr_accessor :position
@@ -11,7 +7,7 @@ class Piece
   end
 
   def inspect
-    "#{self.object_id}"
+    to_s
   end
 
   def initialize(board, position, color)

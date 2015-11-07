@@ -20,7 +20,9 @@ class Display
     puts "Fill the grid!"
     puts "Arrow keys, WASD, or vim to move, space or enter to confirm."
     build_grid.each { |row| puts row.join }
+    nil
   end
+
   def build_grid
     @board.rows.map.with_index do |row, i|
       build_row(row, i)

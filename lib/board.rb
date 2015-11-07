@@ -78,20 +78,6 @@ class Board
     pos.all? {|x| (0...8).include?(x)}
   end
 
-  def line_type(start_pos, end_pos)
-    start_row, start_column = start_pos
-    end_row, end_column = end_pos
-
-    if start_row == end_row
-      pieces_between = @grid[start_row][start_column+1...end_column]
-    end
-
-    return :vertical if start_column == end_column
-    return :diagonal if
-
-    pieces_between.all? {|piece| piece.nil? || !piece.friendly?}
-  end
-
   def in_check?(color)
     king = nil
     get_pieces_of(color).each do |piece|
@@ -149,18 +135,10 @@ class Board
   #   b.checkmate?(:white)
   # end
   def inspect
-    self.object_id
+    Display.new(self).render
   end
 
 end
 
 class MoveError < RuntimeError
-end
-
-
-
-if __FILE__ == $0
-  b = Board.new
-  display = Display.new(b)
-  display.get_move
 end
