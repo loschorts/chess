@@ -11,7 +11,7 @@ class Display
 
   def initialize(board)
     @board = board
-    @cursor_pos = [5,5]
+    @cursor_pos = [0,0]
     @selected = false
   end
 

@@ -3,6 +3,24 @@ require_relative 'display'
 
 class Board
   attr_reader :grid, :display
+
+  def self.simple_checkmate
+    board = self.new(false)
+    King.new(board, [0,0], :white)
+    King.new(board, [7,7], :black)
+    Rook.new(board, [2,0], :black)
+    Rook.new(board, [2,1], :black)
+    board
+  end
+  def self.real_checkmate
+    board = self.new
+    board.move [6, 5], [5, 5]
+    board.move [1, 4], [3, 4]
+    board.move [6, 6], [4, 6]
+    board.move [0, 3], [4, 7]
+    board
+  end
+
   def initialize new_game = true
     @grid = Array.new(8) { Array.new(8) }
     populate if new_game
