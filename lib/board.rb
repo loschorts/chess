@@ -96,8 +96,7 @@ class Board
 
   def in_check?(color)
     king = get_king(color)
-    other_color = other_color(color)
-    get_pieces_of(other_color).each do |piece|
+    pieces_of(other_color).each do |piece|
       return true if piece.moves.include?(king.position)
     end
     false
@@ -108,13 +107,13 @@ class Board
   end
 
   def get_king color
-    get_pieces_of(color).each do |piece|
+    pieces_of(color).each do |piece|
       return piece if piece.is_a? King
     end
     nil
   end
 
-  def get_pieces_of (color)
+  def pieces_of (color)
     pieces = []
     grid.each do |row|
       row.each do |piece|
@@ -126,13 +125,13 @@ class Board
   end
 
   def get_moves_of color
-    pieces = get_pieces_of color
+    pieces = pieces_of color
     pieces.map {|p| p.valid_moves}
   end
 
   def checkmate?(color)
     return false unless in_check?(color)
-    pieces = get_pieces_of(color)
+    pieces = pieces_of(color)
     pieces.all? do |piece|
       piece.moves.all? do |move|
         piece.move_into_check?(move)
